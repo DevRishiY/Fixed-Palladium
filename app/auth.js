@@ -223,7 +223,7 @@ router.get('/remove-account', ensureAuthenticated, async (req, res) => {
     await db.delete(`password-${req.user.email}`);
 
     logToDiscord(
-      "reset-password",
+      "delete-account",
       `${req.user.username} has deleted him account !`
     );
     log(`${req.user.username} has deleted him account !`);

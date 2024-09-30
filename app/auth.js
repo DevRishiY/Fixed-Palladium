@@ -169,7 +169,7 @@ router.get('/reset-password', ensureAuthenticated, async (req, res) => {
 
       logToDiscord(
         "reset password",
-        `${req.user.username} has reset him password !`
+        `${req.user.username} has reset his password !`
       );
       log(`Password reset for ${req.user.username}.`);
   
@@ -224,9 +224,9 @@ router.get('/remove-account', ensureAuthenticated, async (req, res) => {
 
     logToDiscord(
       "delete-account",
-      `${req.user.username} has deleted him account !`
+      `${req.user.username} has deleted his account !`
     );
-    log(`${req.user.username} has deleted him account !`);
+    log(`${req.user.username} has deleted his account !`);
 
     req.logout((err)=>{});
     res.redirect('/');

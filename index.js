@@ -110,9 +110,9 @@ app.use(async (req, res, next) => {
         return next();
       }
     
-      const proxycheck_key = process.env.PROXYCHECK_KEY;
+      const proxyCheckKey = process.env.PROXYCHECK_KEY;
     
-      const proxyResponse = await axios.get(`http://proxycheck.io/v2/${userIp}?key=${proxycheck_key}`);
+      const proxyResponse = await axios.get(`http://proxycheck.io/v2/${userIp}?key=${proxyCheckKey}`);
       const proxyData = proxyResponse.data[userIp];
     
       cache.set(userIp, proxyData);
@@ -131,7 +131,6 @@ app.use(async (req, res, next) => {
   next();
 }});
 
-
 // Require the routes
 let allRoutes = fs.readdirSync('./app');
 for (let i = 0; i < allRoutes.length; i++) {
@@ -145,7 +144,20 @@ app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '1d' // Cache static assets for 1 day
 }));
 
+// Auto Set
+async function autoSet() {
+  const settings = await db.get('settings');
+
+  if (!settings || !settings.joinGuildEnabled || !settings.joinGuildID) {
+    const defaultSettings = {
+      joinGuildEnabled: false,
+      joinGuildID: ""
+    };
+    await db.set('settings', defaultSettings);
+  }
+}
+
+autoSet();
+
 // Start the server
-app.listen(process.env.APP_PORT || 3000, () => {
-  console.log(`Fixed-Palladium has been started on ${process.env.APP_URL} !`);
-});
+app.listen(process.env.APP_PORT || 3000, () => console.log(`Fixed-Palladium has been started on ${process.env.APP_URL} !`));
